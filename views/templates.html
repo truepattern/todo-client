@@ -1,0 +1,22 @@
+  <script type="text/x-handlebars">
+  {{view Todos.CreateTodoView id="new-todo" placeholder="What needs to be done?"}}
+
+  <!-- Insert this after the CreateTodoView and before the collection. -->
+  {{#view Todos.StatsView id="stats"}}
+    {{#view Em.Button classBinding="isActive"
+      target="Todos.todosController"
+      action="clearCompletedTodos"}}
+      Clear Completed Todos
+    {{/view}}
+    {{remainingString}} remaining
+  {{/view}}
+
+  {{view Em.Checkbox class="mark-all-done"
+    title="Mark All as Done"
+    valueBinding="Todos.todosController.allAreDone"}}
+
+  {{#collection contentBinding="Todos.todosController" tagName="ul" itemClassBinding="content.isDone"}}
+    {{view Em.Checkbox titleBinding="content.title"
+        valueBinding="content.isDone"}}
+  {{/collection}}
+  </script>

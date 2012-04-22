@@ -1,0 +1,19 @@
+{
+  "name": "todo-app", 
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express"          : ">= 2.5.2",
+    "jade"             : ">= 0.0.1"
+  },
+  "devDependencies": {
+    "commander"        : ">= 0.0.1",
+    "vows"             : ">= 0.6.1"
+  },
+  "engines": {
+    "node"             : ">= 0.5.0 < 0.7.0"
+  },
+  "scripts": {
+     "test": "vows test/*.js"
+   }
+}

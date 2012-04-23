@@ -1,20 +1,50 @@
 Todos = Ember.Application.create();
 
+/*
 Todos.Todo = Em.Object.extend({
   title: null,
   isDone: false
 });
+*/
 
-Todos.todosController = Em.ArrayProxy.create({
-  content: [],
+Todos.Todo = Ember.Resource.extend({
+    resourceUrl: 'http://localhost:8080/api/v1/todos',
+    resourceName: 'todo',
+    resourceProperties: ['title','isDone'],
+
+    _prepareResourceRequest: function(params) {
+      console.log(params);
+      params.url=params.url+'?callback=?&_method='+params.type;
+    }
+
+});
+
+Todos.todosController = Ember.ResourceController.create({
+    resourceType: Todos.Todo,
+    content: [],
+
+    _prepareResourceRequest: function(params) {
+      console.log(params);
+      params.url=params.url+'?callback=?';
+    },
 
   createTodo: function(title) {
     var todo = Todos.Todo.create({ title: title });
     this.pushObject(todo);
+    todo.saveResource();    
   },
 
   clearCompletedTodos: function() {
-    this.filterProperty('isDone', true).forEach(this.removeObject, this);
+      var deleteset = this.filterProperty('isDone', true);
+      for(var i=0;i<deleteset.length;i++) {
+        var rec=deleteset[i];
+        rec.destroyResource();
+        this.removeObject(rec);
+      }
+      //deleteset.forEach(console.log, this);
+      //console.log(deleteset);
+      //deleteset.forEach(this.destroyResource, this);
+      //deleteset.forEach(this.removeObject, this);
   },
 
   remaining: function() {
@@ -42,13 +72,17 @@ Todos.StatsView = Em.View.extend({
 });
 
 Todos.CreateTodoView = Em.TextField.extend({
-  insertNewline: function() {
-    var value = this.get('value');
-
-    if (value) {
-      Todos.todosController.createTodo(value);
-      this.set('value', '');
+    insertNewline: function() {
+      var value = this.get('value');
+      if (value) {
+        Todos.todosController.createTodo(value);
+        this.set('value', '');
+      }
     }
-  }
 });
+
+// lets write some loader out here
+$(function() {
+    Todos.todosController.findAll();
+  });
 

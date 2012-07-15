@@ -7,7 +7,7 @@ require([
   "use!jquerymobile",
 
   // Modules
-  "modules/home",
+  "modules/home"
 ],
 
 function(namespace, $, Backbone, jquerymobile, Home) {

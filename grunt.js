@@ -53,7 +53,7 @@ module.exports = function(grunt) {
     // only want to load one stylesheet in index.html.
     mincss: {
       "dist/release/index.css": [
-        "assets/css/childcare.css"
+        "assets/css/jquerymobile.css"
       ]
     },
 

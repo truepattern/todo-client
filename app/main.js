@@ -7,10 +7,11 @@ require([
   "use!jquerymobile",
 
   // Modules
-  "modules/home"
+  "modules/home",
+  "modules/todo"
 ],
 
-function(namespace, $, Backbone, jquerymobile, Home) {
+function(namespace, $, Backbone, jquerymobile, Home, Todo) {
 
   // Shorthand the application namespace
   var app = namespace.app;
@@ -22,6 +23,8 @@ function(namespace, $, Backbone, jquerymobile, Home) {
     },
 
     initialize: function() {
+      app.Todos = new Todo.Collection();
+      app.Todos.fetch();
       this.home = new Home.Router("home");
     },
     
@@ -34,50 +37,19 @@ function(namespace, $, Backbone, jquerymobile, Home) {
   // Inside this function, kick-off all initialization, everything up to this
   // point should be definitions.
   $(function() {
-    console.log('history started');
-    $('tr').click(function() {
-      var href = $(this).find("a").attr("href");
-      if(href) {
-        window.location = href;
-      }
-    });
+    console.log('app started');
 
-    // let take the route in url and go there
-    if(document.location.hash) {
-      console.log('Router:'+document.location.hash);
-      // send only the first part within 
-      var mainpart = document.location.hash;
-      if(mainpart.indexOf('/')!=-1) mainpart=mainpart.substr(0,mainpart.indexOf('/'));
-      //console.log('main part='+mainpart);
-      if(mainpart=='#') mainpart='#home';
-      //console.log('main part='+mainpart);
-      document.location.hash = mainpart;
-    }
+    // instantiate router
+    app.router = new Router();
+    console.log('Router:'+document.location.hash);
+
+    // send only the first part within 
+    var mainpart = document.location.hash;
+    if(mainpart.indexOf('/')!=-1) mainpart=mainpart.substr(0,mainpart.indexOf('/'));
+    if(!mainpart || mainpart=='#') mainpart='#home';
+    document.location.hash = mainpart;
+    app.router.navigate(mainpart, true);
     Backbone.history.start();
   });
-
-  /*
-  // catch all the clicks
-  //$(document).on("click", "a:not([data-bypass])", function(evt) {
-  $(document).on('click', function (evt) {
-      var href = window.location;
-      console.log('Clicked :'+href);
-      // @todo: Need to find a way to push a pass-thru
-      if (href.hash && href.protocol != "javascript:") {
-        console.log('Clicked (action on) :'+href.hash);
-        
-        // Stop the default event to ensure the link will not cause a page
-        // refresh.
-        evt.preventDefault();
-        
-        // `Backbone.history.navigate` is sufficient for all Routers and will
-        // trigger the correct events.  The Router's internal `navigate` method
-        // calls this anyways.
-        Backbone.history.navigate(href.hash, true);
-        //app.router.navigate(href.hash, true);
-        //window.location.replace(href.hash);
-      }
-    });
-  */
 
 });

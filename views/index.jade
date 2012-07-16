@@ -1,11 +1,15 @@
 #index(data-role='page')
-  div(data-role='header')
-    h1 Sample Page
+  div(data-role='header', data-theme='a')
+    a(data-role='button', data-transition='fade',href='#todo',data-icon='plus',data-iconpos='left',class='ui-btn-right') Add
+    h1 Todo List
 
-  div(data-role='content')
-    p This is a single page boilerplate template that you can copy to build your first jQuery Mobile page. Each link or form from here will pull a new page in via Ajax to support the animated page transitions.
-    p Just view the source and copy the code to get started. All the CSS and JS is linked to the jQuery CDN versions so this is super easy to set up. Remember to include a meta viewport tag in the head to set the zoom level.
-    pThis template is standard HTML document with a single "page" container inside, unlike a <a href="multipage-template.html" data-ajax="false">multi-page template</a> that has multiple pages within it. We strongly recommend building your site or app as a series of separate pages like this because it's cleaner, more lightweight and works better without JavaScript.
+  div(data-role='content', stule='padding: 15px')
+    ul#todoitems(data-role='listview', data-divider-theme='e', data-inset='true')
+      li(data-role='list-divider',role='heading') List of todos in the system
+      - if(typeof todos !== 'undefined')
+       - for todo in todos
+        li(data-theme='c'): a(href='#todo',data-transition='slide') #{todo.content}
 
   div(data-role='footer')
-    h4 My Footer
+    h4 Sample todo-list by truepattern
+
